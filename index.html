@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BPS 2027 – CIY.CLUB หลักสูตร</title>
+<style>
+  :root {
+    --bg: #EDF4FC;
+    --surface: #ffffff;
+    --card: #ffffff;
+    --primary: #0057A8;
+    --primary-dark: #003d7a;
+    --primary-light: #2186D8;
+    --accent: #00A3E0;
+    --accent2: #0066CC;
+    --text: #1a2a4a;
+    --muted: #5a728a;
+    --border: #BDD5EE;
+    --scratch: #E87E04;
+    --ai-col: #0057A8;
+    --python: #3776AB;
+    --hero-grad: linear-gradient(135deg, #003d7a 0%, #0057A8 45%, #0095D5 100%);
+    --card-shadow: 0 2px 12px rgba(0,87,168,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', 'Noto Sans Thai', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  /* ── Nav ── */
+  #nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 24px;
+    background: var(--primary-dark);
+    border-bottom: 3px solid var(--accent);
+  }
+  #nav .logo-wrap { display: flex; align-items: center; gap: 12px; }
+  #nav .logo-img { height: 36px; border-radius: 4px; }
+  #nav .logo-text {
+    font-size: 0.88rem; font-weight: 700; color: #fff;
+    letter-spacing: 0.5px; line-height: 1.3;
+  }
+  #nav .logo-text span { color: #7dd3fc; font-size: 0.78rem; font-weight: 400; display: block; }
+  #nav .controls { display: flex; gap: 10px; align-items: center; }
+  #lang-toggle {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; padding: 5px 14px; border-radius: 20px; cursor: pointer;
+    font-size: 0.82rem; transition: all .2s;
+  }
+  #lang-toggle:hover { background: var(--accent); border-color: var(--accent); }
+  .slide-counter { color: rgba(255,255,255,0.7); font-size: 0.82rem; }
+
+  /* ── Slide container ── */
+  #slides-wrap { position: fixed; top: 58px; left: 0; right: 0; bottom: 52px; overflow: hidden; }
+  .slide {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 32px 56px;
+    opacity: 0; transform: translateX(60px);
+    transition: all .42s cubic-bezier(.4,0,.2,1);
+    pointer-events: none; overflow-y: auto;
+  }
+  .slide.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+  .slide.exit { opacity: 0; transform: translateX(-60px); }
+
+  /* ── Slide layouts ── */
+  .slide-hero {
+    background: var(--hero-grad);
+    text-align: center; gap: 18px;
+  }
+  .slide-hero .hero-logo { height: 72px; margin-bottom: 8px; filter: brightness(0) invert(1); }
+  .slide-hero .tagline {
+    font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800;
+    line-height: 1.15; color: #fff;
+  }
+  .slide-hero .sub {
+    font-size: 1.1rem; color: rgba(255,255,255,0.85); max-width: 620px; margin: 0 auto;
+  }
+  .slide-hero .badge {
+    display: inline-block; background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.45);
+    padding: 7px 22px; border-radius: 20px; font-size: 0.92rem;
+    margin-top: 6px; color: #fff; backdrop-filter: blur(4px);
+  }
+
+  .slide-content { gap: 20px; max-width: 960px; width: 100%; margin: 0 auto; }
+  .slide-header { width: 100%; border-left: 5px solid var(--primary); padding-left: 14px; }
+  .slide-header .label {
+    font-size: 0.75rem; font-weight: 700; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 2px; display: block; margin-bottom: 4px;
+  }
+  .slide-header h2 {
+    font-size: clamp(1.4rem, 2.8vw, 2rem); font-weight: 800; color: var(--primary-dark);
+  }
+
+  /* ── Cards ── */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; width: 100%; }
+  .card {
+    background: var(--card); border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 16px 18px; box-shadow: var(--card-shadow); transition: transform .2s, border-color .2s, box-shadow .2s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: var(--primary-light); box-shadow: 0 6px 20px rgba(0,87,168,0.18); }
+  .card .icon { font-size: 1.8rem; margin-bottom: 8px; }
+  .card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; color: var(--primary); }
+  .card p { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+
+  /* ── Bullet list ── */
+  .bullets { list-style: none; display: flex; flex-direction: column; gap: 8px; width: 100%; }
+  .bullets li {
+    background: var(--card); border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 10px 14px; display: flex; align-items: flex-start; gap: 10px;
+    font-size: 0.9rem; color: var(--text); line-height: 1.55; box-shadow: var(--card-shadow);
+  }
+  .bullets li::before { content: '›'; color: var(--primary); font-size: 1.3rem; flex-shrink: 0; font-weight: 700; }
+
+  /* ── Flowchart ── */
+  .flowchart { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; justify-content: center; width: 100%; }
+  .flow-node {
+    background: var(--card); border: 2px solid var(--primary); border-radius: 10px;
+    padding: 9px 14px; font-size: 0.82rem; font-weight: 700; text-align: center;
+    min-width: 105px; color: var(--primary); box-shadow: var(--card-shadow);
+  }
+  .flow-arrow { color: var(--primary-light); font-size: 1.4rem; font-weight: 700; }
+  .flow-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; }
+
+  /* ── Level table ── */
+  .level-grid { display: grid; grid-template-columns: 1fr; gap: 8px; width: 100%; max-height: 56vh; overflow-y: auto; }
+  .level-row {
+    display: grid; grid-template-columns: 52px 1fr 1fr 1fr; gap: 10px;
+    background: var(--card); border: 1.5px solid var(--border); border-radius: 10px;
+    padding: 10px 14px; align-items: center; box-shadow: var(--card-shadow);
+    transition: border-color .2s;
+  }
+  .level-row:hover { border-color: var(--primary-light); }
+  .level-num {
+    font-size: 1.5rem; font-weight: 800; color: var(--primary);
+    text-align: center;
+  }
+  .level-title { font-weight: 700; font-size: 0.9rem; color: var(--text); }
+  .level-weeks { color: var(--muted); font-size: 0.8rem; }
+  .level-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.45; }
+
+  /* ── Week table ── */
+  .week-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+  .week-table th {
+    background: var(--primary); color: #fff; padding: 9px 12px;
+    text-align: left; font-weight: 700;
+  }
+  .week-table th:first-child { border-radius: 8px 0 0 0; }
+  .week-table th:last-child { border-radius: 0 8px 0 0; }
+  .week-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.45; background: #fff; }
+  .week-table tr:hover td { background: #EDF4FC; }
+
+  /* ── Highlight box ── */
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(0,87,168,0.08), rgba(0,163,224,0.08));
+    border: 1.5px solid var(--primary); border-radius: 12px; padding: 18px 22px;
+    width: 100%; text-align: center; font-size: 0.95rem; line-height: 1.7; color: var(--text);
+  }
+  .highlight-box strong { color: var(--primary); }
+
+  /* ── Two-col ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; width: 100%; }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ── Tools ── */
+  .tool-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1.5px solid var(--border); border-radius: 30px;
+    padding: 7px 14px; font-size: 0.84rem; font-weight: 600; margin: 4px;
+    box-shadow: var(--card-shadow); color: var(--text);
+  }
+  .tool-badge .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* ── Accent colors per track ── */
+  .c-scratch { border-color: #E87E04 !important; }
+  .c-scratch .level-num { color: #E87E04; }
+  .c-ai { border-color: #0057A8 !important; }
+  .c-ai .level-num { color: #0057A8; }
+  .c-python { border-color: #3776AB !important; }
+  .c-python .level-num { color: #3776AB; }
+
+  /* ── Track badge ── */
+  .track-badge {
+    display: inline-block; padding: 3px 12px; border-radius: 20px;
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .tb-scratch { background: #FFF3E0; color: #E87E04; border: 1px solid #E87E04; }
+  .tb-ai { background: #E3F0FB; color: #0057A8; border: 1px solid #0057A8; }
+  .tb-python { background: #E8F4FD; color: #3776AB; border: 1px solid #3776AB; }
+
+  /* ── Section divider ── */
+  .section-title {
+    width: 100%; text-align: center; font-size: 0.72rem; font-weight: 700; color: var(--muted);
+    letter-spacing: 2px; text-transform: uppercase; padding: 4px 0;
+    border-bottom: 1px dashed var(--border); margin-bottom: 4px;
+  }
+
+  /* ── Info row ── */
+  .info-row { display: flex; gap: 12px; flex-wrap: wrap; width: 100%; }
+  .info-pill {
+    background: var(--card); border: 1.5px solid var(--border); border-radius: 8px;
+    padding: 8px 14px; font-size: 0.82rem; color: var(--text); box-shadow: var(--card-shadow);
+  }
+  .info-pill strong { color: var(--primary); }
+
+  /* ── Code block ── */
+  .code-block {
+    background: #1e2a3a; border-radius: 10px; padding: 14px 16px;
+    font-family: 'Consolas', 'Monaco', monospace; font-size: 0.78rem;
+    color: #a8d8f0; line-height: 1.7; overflow: auto;
+  }
+  .code-block .kw { color: #7dd3fc; }
+  .code-block .fn { color: #fbbf24; }
+  .code-block .val { color: #86efac; }
+  .code-block .cm { color: #94a3b8; }
+
+  /* ── Footer nav ── */
+  #footer-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    padding: 9px 16px; background: var(--primary-dark);
+    border-top: 2px solid var(--accent);
+  }
+  .nav-btn {
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; padding: 7px 20px; border-radius: 30px; cursor: pointer;
+    font-size: 0.85rem; transition: all .2s; font-weight: 600;
+  }
+  .nav-btn:hover { background: var(--accent); border-color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  .dots { display: flex; gap: 5px; }
+  .dot-btn {
+    width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.3);
+    border: none; cursor: pointer; transition: all .2s;
+  }
+  .dot-btn.active { background: #fff; transform: scale(1.4); }
+
+  /* ── Scroll ── */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+
+  /* ── Hero outcome list ── */
+  .hero-final-list {
+    list-style: none; display: flex; flex-direction: column; gap: 8px;
+    max-width: 640px; width: 100%; text-align: left;
+  }
+  .hero-final-list li {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px; padding: 8px 14px; font-size: 0.88rem;
+    color: rgba(255,255,255,0.92); display: flex; align-items: center; gap: 10px;
+  }
+  .hero-final-list li::before { content: '✓'; color: #7dd3fc; font-weight: 700; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo-wrap">
+    <img src="Copy of CIY Logo 1.JPG" alt="CIY.CLUB" class="logo-img">
+    <div class="logo-text">
+      CIY.CLUB · BPS 2027
+      <span>Code It Yourself</span>
+    </div>
+  </div>
+  <div class="controls">
+    <button id="lang-toggle" onclick="toggleLang()">🌐 ภาษาไทย</button>
+    <span class="slide-counter"><span id="cur">1</span> / <span id="total">0</span></span>
+  </div>
+</nav>
+
+<!-- SLIDES -->
+<div id="slides-wrap">
+
+  <!-- 0: Hero -->
+  <div class="slide slide-hero active" data-slide="0">
+    <img src="Copy of CIY Logo 1.JPG" alt="CIY.CLUB" class="hero-logo">
+    <div class="tagline"
+      data-en="Real-World Application<br>&amp; Future Pathways"
+      data-th="การเรียนรู้สู่โลกจริง<br>และเส้นทางอนาคต">
+      Real-World Application<br>&amp; Future Pathways
+    </div>
+    <p class="sub"
+      data-en="From Coding Foundations to Web, AI, and Digital Product Creation"
+      data-th="จากพื้นฐานการเขียนโค้ด สู่เว็บ, AI และการสร้างผลิตภัณฑ์ดิจิทัล">
+      From Coding Foundations to Web, AI, and Digital Product Creation
+    </p>
+    <span class="badge"
+      data-en="CIY.CLUB · 10 Levels · 80+ Weeks"
+      data-th="CIY.CLUB · 10 ระดับ · กว่า 80 สัปดาห์">
+      CIY.CLUB · 10 Levels · 80+ Weeks
+    </span>
+  </div>
+
+  <!-- 1: Learning Outcomes -->
+  <div class="slide slide-content" data-slide="1">
+    <div class="slide-header">
+      <span class="label" data-en="Overview" data-th="ภาพรวม">Overview</span>
+      <h2 data-en="Learning Outcomes" data-th="ผลลัพธ์การเรียนรู้">Learning Outcomes</h2>
+    </div>
+    <ul class="bullets">
+      <li data-en="Build a strong foundation in coding logic: algorithm, sequence, loops, conditionals, debugging, and problem-solving"
+          data-th="สร้างพื้นฐานที่แข็งแกร่งในตรรกะการเขียนโค้ด: algorithm, sequence, loops, conditionals, debugging และการแก้ปัญหา">
+        Build a strong foundation in coding logic: algorithm, sequence, loops, conditionals, debugging, and problem-solving
+      </li>
+      <li data-en="Create interactive projects in Scratch — from guided tasks to independent design and system thinking"
+          data-th="สร้างโปรเจกต์ interactive ใน Scratch — จากการทำตามคำแนะนำสู่การออกแบบอิสระและการคิดเป็นระบบ">
+        Create interactive projects in Scratch — from guided tasks to independent design and system thinking
+      </li>
+      <li data-en="Understand how games and digital systems work through input, logic, feedback, scoring, and progression"
+          data-th="เข้าใจวิธีที่เกมและระบบดิจิทัลทำงาน ผ่าน input, logic, feedback, scoring และ progression">
+        Understand how games and digital systems work through input, logic, feedback, scoring, and progression
+      </li>
+      <li data-en="Use AI responsibly as a support tool — not a replacement — for thinking, creativity, planning, and communication"
+          data-th="ใช้ AI อย่างมีความรับผิดชอบ เป็นเครื่องมือสนับสนุน ไม่ใช่ตัวแทน สำหรับความคิด ความคิดสร้างสรรค์ และการสื่อสาร">
+        Use AI responsibly as a support tool — not a replacement — for thinking, creativity, planning, and communication
+      </li>
+      <li data-en="Transition from block-based coding to text-based programming in Python with confidence"
+          data-th="เปลี่ยนจากการเขียนโค้ดแบบบล็อกสู่การเขียนโปรแกรมแบบข้อความด้วย Python อย่างมั่นใจ">
+        Transition from block-based coding to text-based programming in Python with confidence
+      </li>
+      <li data-en="Build Python programs using variables, input, conditions, functions, loops, and system design"
+          data-th="สร้างโปรแกรม Python ด้วย variables, input, conditions, functions, loops และการออกแบบระบบ">
+        Build Python programs using variables, input, conditions, functions, loops, and system design
+      </li>
+      <li data-en="Develop computational thinking, creativity, communication, and presentation skills through project-based learning"
+          data-th="พัฒนา Computational Thinking ความคิดสร้างสรรค์ การสื่อสาร และทักษะการนำเสนอ ผ่านการเรียนรู้แบบ project-based">
+        Develop computational thinking, creativity, communication, and presentation skills through project-based learning
+      </li>
+    </ul>
+  </div>
+
+  <!-- 2: Learning Journey Flowchart -->
+  <div class="slide slide-content" data-slide="2">
+    <div class="slide-header">
+      <span class="label" data-en="Learning Path" data-th="เส้นทางการเรียนรู้">Learning Path</span>
+      <h2 data-en="Step-by-Step Learning Logic" data-th="ขั้นตอนการเรียนรู้แบบ Step-by-Step">Step-by-Step Learning Logic</h2>
+    </div>
+    <div class="flowchart">
+      <div class="flow-row">
+        <div class="flow-node" style="border-color:var(--scratch);color:var(--scratch)">🧱 <span data-en="Coding Logic" data-th="ตรรกะการโค้ด">Coding Logic</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" style="border-color:var(--scratch);color:var(--scratch)">🎮 <span data-en="Interactive Systems" data-th="ระบบ Interactive">Interactive Systems</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" style="border-color:var(--scratch);color:var(--scratch)">🕹️ <span data-en="Game Design" data-th="การออกแบบเกม">Game Design</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" style="border-color:var(--ai-col);color:var(--ai-col)">🤖 <span data-en="Critical AI Use" data-th="การใช้ AI อย่างรู้คิด">Critical AI Use</span></div>
+      </div>
+      <div class="flow-row" style="margin-top:10px">
+        <div class="flow-node" style="border-color:var(--ai-col);color:var(--ai-col)">📊 <span data-en="System Planning" data-th="การวางแผนระบบ">System Planning</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" style="border-color:var(--python);color:var(--python)">🐍 <span data-en="Python Basics" data-th="พื้นฐาน Python">Python Basics</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" style="border-color:var(--python);color:var(--python)">⚙️ <span data-en="Structured Systems" data-th="ระบบที่มีโครงสร้าง">Structured Systems</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node" style="border-color:var(--python);color:var(--python)">🧠 <span data-en="AI-style Programs" data-th="โปรแกรมแบบ AI">AI-style Programs</span></div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:14px">
+      <strong data-en="Understand basic logic" data-th="เข้าใจตรรกะพื้นฐาน">Understand basic logic</strong>
+      <span data-en=" → Create interactive systems → Design bigger game structures → Think critically about AI → Plan systems clearly → Code in Python → Build intelligent programs"
+            data-th=" → สร้างระบบ interactive → ออกแบบโครงสร้างเกมที่ใหญ่ขึ้น → คิดวิเคราะห์ AI → วางแผนระบบ → เขียน Python → สร้างโปรแกรมอัจฉริยะ">
+        → Create interactive systems → Design bigger game structures → Think critically about AI → Plan systems clearly → Code in Python → Build intelligent programs
+      </span>
+    </div>
+  </div>
+
+  <!-- 3: All Levels Overview -->
+  <div class="slide slide-content" data-slide="3">
+    <div class="slide-header">
+      <span class="label" data-en="Curriculum" data-th="หลักสูตร">Curriculum</span>
+      <h2 data-en="All 10 Levels at a Glance" data-th="ภาพรวม 10 ระดับ">All 10 Levels at a Glance</h2>
+    </div>
+    <div class="level-grid">
+      <div class="section-title" data-en="🧱 Scratch Track (Levels 1–4)" data-th="🧱 กลุ่ม Scratch (ระดับ 1–4)">🧱 Scratch Track (Levels 1–4)</div>
+      <div class="level-row c-scratch">
+        <div class="level-num">1</div>
+        <div class="level-title" data-en="Scratch Foundations" data-th="พื้นฐาน Scratch">Scratch Foundations</div>
+        <div class="level-weeks">8 <span data-en="weeks" data-th="สัปดาห์">weeks</span></div>
+        <div class="level-desc" data-en="Algorithm, sequence, loops, conditionals, debugging · Code.org + guided Scratch projects"
+             data-th="Algorithm, sequence, loops, conditionals, debugging · Code.org + โปรเจกต์ Scratch แบบ guided">Algorithm, sequence, loops, conditionals, debugging · Code.org + guided Scratch projects</div>
+      </div>
+      <div class="level-row c-scratch">
+        <div class="level-num">2</div>
+        <div class="level-title" data-en="Scratch Creator" data-th="Scratch Creator">Scratch Creator</div>
+        <div class="level-weeks">8 <span data-en="weeks" data-th="สัปดาห์">weeks</span></div>
+        <div class="level-desc" data-en="Independent design · Variables, timing, effects, broadcast · Input→Process→Output thinking"
+             data-th="การออกแบบอิสระ · Variables, timing, effects, broadcast · การคิดแบบ Input→Process→Output">Independent design · Variables, timing, effects, broadcast · Input→Process→Output thinking</div>
+      </div>
+      <div class="level-row c-scratch">
+        <div class="level-num">3</div>
+        <div class="level-title" data-en="Scratch Game Developer" data-th="Scratch: นักพัฒนาเกม">Scratch Game Developer</div>
+        <div class="level-weeks">8 <span data-en="weeks" data-th="สัปดาห์">weeks</span></div>
+        <div class="level-desc" data-en="Pong, Catch, Clicker games · Collision, scoring, AI-generated assets · Input→Logic→Feedback→Score"
+             data-th="เกม Pong, Catch, Clicker · Collision, scoring, assets จาก AI · Input→Logic→Feedback→Score">Pong, Catch, Clicker games · Collision, scoring, AI-generated assets · Input→Logic→Feedback→Score</div>
+      </div>
+      <div class="level-row c-scratch">
+        <div class="level-num">4</div>
+        <div class="level-title" data-en="Scratch Advanced Game Systems" data-th="Scratch: ระบบเกมขั้นสูง">Scratch Advanced Game Systems</div>
+        <div class="level-weeks">8 <span data-en="weeks" data-th="สัปดาห์">weeks</span></div>
+        <div class="level-desc" data-en="My Blocks (functions), Lists, Game flow (Start→Game→Result→Home), Best Score system"
+             data-th="My Blocks (functions), Lists, Game flow (Start→Game→Result→Home), ระบบ Best Score">My Blocks (functions), Lists, Game flow (Start→Game→Result→Home), Best Score system</div>
+      </div>
+      <div class="section-title" data-en="🤖 AI Track (Levels 5–6)" data-th="🤖 กลุ่ม AI (ระดับ 5–6)">🤖 AI Track (Levels 5–6)</div>
+      <div class="level-row c-ai">
+        <div class="level-num">5</div>
+        <div class="level-title" data-en="AI Explorer" data-th="AI Explorer">AI Explorer</div>
+        <div class="level-weeks">~8 <span data-en="weeks" data-th="สัปดาห์">weeks</span></div>
+        <div class="level-desc" data-en="What is AI · Prompt engineering (RACE/SASE) · ChatGPT, Gemini, DeepAI · Responsible use"
+             data-th="AI คืออะไร · Prompt Engineering (RACE/SASE) · ChatGPT, Gemini, DeepAI · การใช้อย่างมีความรับผิดชอบ">What is AI · Prompt engineering (RACE/SASE) · ChatGPT, Gemini, DeepAI · Responsible use</div>
+      </div>
+      <div class="level-row c-ai">
+        <div class="level-num">6</div>
+        <div class="level-title" data-en="AI to Scratch System Builder" data-th="AI สู่ Scratch System Builder">AI to Scratch System Builder</div>
+        <div class="level-weeks">~8 <span data-en="weeks" data-th="สัปดาห์">weeks</span></div>
+        <div class="level-desc" data-en="AI idea generation → Flowcharts → Structured Scratch systems · Plan before coding"
+             data-th="สร้างไอเดียด้วย AI → Flowchart → Scratch systems · วางแผนก่อนเขียนโค้ด">AI idea generation → Flowcharts → Structured Scratch systems · Plan before coding</div>
+      </div>
+      <div class="section-title" data-en="🐍 Python Track (Levels 7–10)" data-th="🐍 กลุ่ม Python (ระดับ 7–10)">🐍 Python Track (Levels 7–10)</div>
+      <div class="level-row c-python">
+        <div class="level-num">7</div>
+        <div class="level-title" data-en="Python Foundations" data-th="พื้นฐาน Python">Python Foundations</div>
+        <div class="level-weeks">~8 <span data-en="weeks" data-th="สัปดาห์">weeks</span></div>
+        <div class="level-desc" data-en="print(), variables, data types, input(), calculations · Text-based Input→Process→Output"
+             data-th="print(), variables, data types, input(), การคำนวณ · Text-based Input→Process→Output">print(), variables, data types, input(), calculations · Text-based Input→Process→Output</div>
+      </div>
+      <div class="level-row c-python">
+        <div class="level-num">8</div>
+        <div class="level-title" data-en="Python Decision Systems" data-th="Python: ระบบการตัดสินใจ">Python Decision Systems</div>
+        <div class="level-weeks">~8 <span data-en="weeks" data-th="สัปดาห์">weeks</span></div>
+        <div class="level-desc" data-en="Comparison operators · if/elif/else · Interactive quizzes, checkers, logic programs"
+             data-th="Comparison operators · if/elif/else · Quizzes, checkers, logic programs">Comparison operators · if/elif/else · Interactive quizzes, checkers, logic programs</div>
+      </div>
+      <div class="level-row c-python">
+        <div class="level-num">9</div>
+        <div class="level-title" data-en="Python System &amp; Function Builder" data-th="Python: ระบบและ Function Builder">Python System &amp; Function Builder</div>
+        <div class="level-weeks">~8 <span data-en="weeks" data-th="สัปดาห์">weeks</span></div>
+        <div class="level-desc" data-en="Functions, parameters, while loops, modular design · Organized and reusable programs"
+             data-th="Functions, parameters, while loops, modular design · โปรแกรมที่จัดระเบียบและนำมาใช้ซ้ำได้">Functions, parameters, while loops, modular design · Organized and reusable programs</div>
+      </div>
+      <div class="level-row c-python">
+        <div class="level-num">10</div>
+        <div class="level-title" data-en="Python AI System &amp; Intelligence Builder" data-th="Python: AI System &amp; Intelligence Builder">Python AI System &amp; Intelligence Builder</div>
+        <div class="level-weeks">~8 <span data-en="weeks" data-th="สัปดาห์">weeks</span></div>
+        <div class="level-desc" data-en="Rule-based vs AI-like systems · Data, memory, patterns, prediction, randomness · Adaptive programs"
+             data-th="Rule-based vs AI-like systems · ข้อมูล, memory, patterns, prediction, randomness · โปรแกรม adaptive">Rule-based vs AI-like systems · Data, memory, patterns, prediction, randomness · Adaptive programs</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4: Level 1 Detail -->
+  <div class="slide slide-content" data-slide="4">
+    <div class="slide-header">
+      <span class="label" data-en="Level 1 · 8 Weeks · Scratch Track" data-th="ระดับ 1 · 8 สัปดาห์ · กลุ่ม Scratch">Level 1 · 8 Weeks · Scratch Track</span>
+      <h2 data-en="Scratch Foundations" data-th="พื้นฐาน Scratch">Scratch Foundations</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:8px;font-weight:600"
+           data-en="Weekly Course Structure:" data-th="โครงสร้างหลักสูตรรายสัปดาห์:">Weekly Course Structure:</p>
+        <table class="week-table" style="font-size:.78rem">
+          <thead><tr>
+            <th data-en="Week" data-th="สัปดาห์">Week</th>
+            <th data-en="Theme" data-th="หัวข้อ">Theme</th>
+            <th data-en="Activity" data-th="กิจกรรม">Activity</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>1</td>
+              <td data-en="Algorithm &amp; Sequence" data-th="Algorithm &amp; Sequence">Algorithm &amp; Sequence</td>
+              <td data-en="Unplugged + Code.org" data-th="Unplugged + Code.org">Unplugged + Code.org</td></tr>
+            <tr><td>2</td>
+              <td data-en="Loops &amp; Patterns" data-th="Loops &amp; Patterns">Loops &amp; Patterns</td>
+              <td data-en="Code.org challenges" data-th="Code.org challenges">Code.org challenges</td></tr>
+            <tr><td>3</td>
+              <td data-en="Conditionals &amp; Debugging" data-th="Conditionals &amp; Debugging">Conditionals &amp; Debugging</td>
+              <td data-en="Code.org – if/then logic" data-th="Code.org – if/then logic">Code.org – if/then logic</td></tr>
+            <tr><td>4</td>
+              <td data-en="Intro to Scratch / Project 1" data-th="แนะนำ Scratch / โปรเจกต์ 1">Intro to Scratch / Project 1</td>
+              <td data-en="Space Talk – Animation + speech" data-th="Space Talk – Animation + การพูด">Space Talk – Animation + speech</td></tr>
+            <tr><td>5</td>
+              <td data-en="Project 2" data-th="โปรเจกต์ 2">Project 2</td>
+              <td data-en="Catch the Bus – movement + timing" data-th="Catch the Bus – movement + timing">Catch the Bus – movement + timing</td></tr>
+            <tr><td>6</td>
+              <td data-en="Project 3" data-th="โปรเจกต์ 3">Project 3</td>
+              <td data-en="Find the Bug – interaction + control" data-th="Find the Bug – interaction + control">Find the Bug – interaction + control</td></tr>
+            <tr><td>7</td>
+              <td data-en="Project 4 + Mini Project" data-th="โปรเจกต์ 4 + Mini Project">Project 4 + Mini Project</td>
+              <td data-en="Silly Eyes + Coding in Use" data-th="Silly Eyes + Coding in Use">Silly Eyes + Coding in Use</td></tr>
+            <tr><td>8</td>
+              <td data-en="Mini Project Final" data-th="Mini Project สุดท้าย">Mini Project Final</td>
+              <td data-en="Debug, refine &amp; explain logic" data-th="Debug, ปรับปรุง และอธิบาย logic">Debug, refine &amp; explain logic</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <p style="color:var(--muted);font-size:.82rem;font-weight:600"
+           data-en="Key Projects:" data-th="โปรเจกต์หลัก:">Key Projects:</p>
+        <div class="cards" style="grid-template-columns:1fr">
+          <div class="card"><div class="icon">🚀</div><h3>Space Talk</h3><p data-en="Animation + speech bubbles" data-th="Animation + speech bubbles">Animation + speech bubbles</p></div>
+          <div class="card"><div class="icon">🚌</div><h3>Catch the Bus</h3><p data-en="Movement + timing logic" data-th="Movement + timing logic">Movement + timing logic</p></div>
+          <div class="card"><div class="icon">🐛</div><h3>Find the Bug</h3><p data-en="Interaction + control systems" data-th="Interaction + control systems">Interaction + control systems</p></div>
+          <div class="card"><div class="icon">👁️</div><h3>Silly Eyes</h3><p data-en="Mouse-based interaction" data-th="Mouse-based interaction">Mouse-based interaction</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5: Level 2 Detail -->
+  <div class="slide slide-content" data-slide="5">
+    <div class="slide-header">
+      <span class="label" data-en="Level 2 · 8 Weeks · Scratch Track" data-th="ระดับ 2 · 8 สัปดาห์ · กลุ่ม Scratch">Level 2 · 8 Weeks · Scratch Track</span>
+      <h2 data-en="Scratch Creator" data-th="Scratch Creator">Scratch Creator</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:8px;font-weight:600"
+           data-en="Weekly Course Structure:" data-th="โครงสร้างหลักสูตรรายสัปดาห์:">Weekly Course Structure:</p>
+        <table class="week-table" style="font-size:.78rem">
+          <thead><tr>
+            <th data-en="Week" data-th="สัปดาห์">Week</th>
+            <th data-en="Theme" data-th="หัวข้อ">Theme</th>
+            <th data-en="Activity" data-th="กิจกรรม">Activity</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>1</td>
+              <td data-en="Design Thinking" data-th="Design Thinking">Design Thinking</td>
+              <td data-en="Brainstorm + Story Mapping" data-th="Brainstorm + Story Mapping">Brainstorm + Story Mapping</td></tr>
+            <tr><td>2</td>
+              <td data-en="Advanced Scratch Tools" data-th="เครื่องมือ Scratch ขั้นสูง">Advanced Scratch Tools</td>
+              <td data-en="Variables / Timing / Effects / Broadcast" data-th="Variables / Timing / Effects / Broadcast">Variables / Timing / Effects / Broadcast</td></tr>
+            <tr><td>3</td>
+              <td data-en="Project 1: Surprise! Animation" data-th="โปรเจกต์ 1: Surprise! Animation">Project 1: Surprise! Animation</td>
+              <td data-en="Guided → Semi-guided" data-th="Guided → Semi-guided">Guided → Semi-guided</td></tr>
+            <tr><td>4</td>
+              <td data-en="Project 2: I Made You a Book" data-th="โปรเจกต์ 2: I Made You a Book">Project 2: I Made You a Book</td>
+              <td data-en="Interactive story build" data-th="สร้าง interactive story">Interactive story build</td></tr>
+            <tr><td>5</td>
+              <td data-en="Project Planning" data-th="วางแผนโปรเจกต์">Project Planning</td>
+              <td data-en="Input→Process→Output flow + coach feedback" data-th="Input→Process→Output flow + coach feedback">Input→Process→Output flow + coach feedback</td></tr>
+            <tr><td>6</td>
+              <td data-en="Final Project Build (Part 1)" data-th="สร้าง Final Project (ส่วนที่ 1)">Final Project Build (Part 1)</td>
+              <td data-en="Independent creation" data-th="สร้างอิสระ">Independent creation</td></tr>
+            <tr><td>7</td>
+              <td data-en="Final Project Build (Part 2)" data-th="สร้าง Final Project (ส่วนที่ 2)">Final Project Build (Part 2)</td>
+              <td data-en="Logic explanation + refinement" data-th="อธิบาย logic + ปรับปรุง">Logic explanation + refinement</td></tr>
+            <tr><td>8</td>
+              <td data-en="Final Presentation" data-th="นำเสนอ Final">Final Presentation</td>
+              <td data-en="Showcase + explain project logic" data-th="นำเสนอ + อธิบาย logic">Showcase + explain project logic</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="highlight-box">
+          <p style="font-size:1.4rem;margin-bottom:8px">🎨</p>
+          <p data-en="Students move from <strong>following instructions</strong> to <strong>designing their own</strong> interactive stories and projects"
+             data-th="นักเรียนเปลี่ยนจาก<strong>การทำตามคำสั่ง</strong> ไปสู่<strong>การออกแบบด้วยตัวเอง</strong>">
+            Students move from <strong>following instructions</strong> to <strong>designing their own</strong> interactive stories and projects
+          </p>
+          <p style="margin-top:10px;color:var(--muted);font-size:.82rem"
+             data-en="Key concept: Input → Process → Output system thinking"
+             data-th="แนวคิดหลัก: การคิดแบบ Input → Process → Output">
+            Key concept: Input → Process → Output system thinking
+          </p>
+        </div>
+        <div class="cards" style="grid-template-columns:1fr">
+          <div class="card"><div class="icon">😲</div><h3>Surprise! Animation</h3><p data-en="Storytelling, emotion &amp; timing control" data-th="Storytelling, อารมณ์ และการควบคุม timing">Storytelling, emotion &amp; timing control</p></div>
+          <div class="card"><div class="icon">📖</div><h3>I Made You a Book</h3><p data-en="Interactive story with user control" data-th="Interactive story ที่ผู้ใช้ควบคุมได้">Interactive story with user control</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6: Level 3 Detail -->
+  <div class="slide slide-content" data-slide="6">
+    <div class="slide-header">
+      <span class="label" data-en="Level 3 · 8 Weeks · Scratch Track" data-th="ระดับ 3 · 8 สัปดาห์ · กลุ่ม Scratch">Level 3 · 8 Weeks · Scratch Track</span>
+      <h2 data-en="Scratch Game Developer" data-th="Scratch: นักพัฒนาเกม">Scratch Game Developer</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:8px;font-weight:600"
+           data-en="Weekly Course Structure:" data-th="โครงสร้างหลักสูตรรายสัปดาห์:">Weekly Course Structure:</p>
+        <table class="week-table" style="font-size:.78rem">
+          <thead><tr>
+            <th data-en="Week" data-th="สัปดาห์">Week</th>
+            <th data-en="Theme" data-th="หัวข้อ">Theme</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>1</td><td data-en="Review + AI Image Generation (DeepAI)" data-th="ทบทวน + สร้างรูปภาพ AI (DeepAI)">Review + AI Image Generation (DeepAI)</td></tr>
+            <tr><td>2</td><td data-en="Pong Game – collision detection, movement, scoring" data-th="เกม Pong – collision detection, movement, scoring">Pong Game – collision detection, movement, scoring</td></tr>
+            <tr><td>3</td><td data-en="Catch &amp; Collect Game – random spawning, dynamic scoring" data-th="เกม Catch &amp; Collect – random spawning, dynamic scoring">Catch &amp; Collect Game – random spawning, dynamic scoring</td></tr>
+            <tr><td>4</td><td data-en="Clicker Game System – continuous input, variables, progression" data-th="Clicker Game – continuous input, variables, progression">Clicker Game System – continuous input, variables, progression</td></tr>
+            <tr><td>5</td><td data-en="Clicker Shop &amp; Upgrade System – game economy, UI navigation" data-th="Clicker Shop &amp; Upgrade – game economy, UI navigation">Clicker Shop &amp; Upgrade System – game economy, UI navigation</td></tr>
+            <tr><td>6</td><td data-en="Mini Project Planning &amp; Build" data-th="วางแผนและสร้าง Mini Project">Mini Project Planning &amp; Build</td></tr>
+            <tr><td>7</td><td data-en="Independent Project Development – debug, polish, refine" data-th="พัฒนาโปรเจกต์อิสระ – debug, polish, refine">Independent Project Development – debug, polish, refine</td></tr>
+            <tr><td>8</td><td data-en="Final Game Showcase &amp; Presentation" data-th="นำเสนอและ Showcase เกมสุดท้าย">Final Game Showcase &amp; Presentation</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="cards" style="grid-template-columns:1fr 1fr">
+          <div class="card"><div class="icon">🏓</div><h3>Pong</h3><p data-en="Collision, movement, scoring" data-th="Collision, movement, scoring">Collision, movement, scoring</p></div>
+          <div class="card"><div class="icon">🧲</div><h3>Catch &amp; Collect</h3><p data-en="Random spawning, dynamic scoring" data-th="Random spawning, dynamic scoring">Random spawning, dynamic scoring</p></div>
+          <div class="card"><div class="icon">👆</div><h3>Clicker Game</h3><p data-en="Continuous input, variables" data-th="Continuous input, variables">Continuous input, variables</p></div>
+          <div class="card"><div class="icon">🏪</div><h3>Clicker Shop</h3><p data-en="Game economy, upgrades, UI" data-th="Game economy, upgrades, UI">Game economy, upgrades, UI</p></div>
+        </div>
+        <div class="flowchart">
+          <div class="flow-node" style="min-width:70px">Input</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node" style="min-width:70px">Logic</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node" style="min-width:80px">Feedback</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node" style="min-width:70px">Score</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node" style="min-width:90px">Progression</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7: Level 4 Detail -->
+  <div class="slide slide-content" data-slide="7">
+    <div class="slide-header">
+      <span class="label" data-en="Level 4 · 8 Weeks · Scratch Track" data-th="ระดับ 4 · 8 สัปดาห์ · กลุ่ม Scratch">Level 4 · 8 Weeks · Scratch Track</span>
+      <h2 data-en="Scratch Advanced Game Systems" data-th="Scratch: ระบบเกมขั้นสูง">Scratch Advanced Game Systems</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:8px;font-weight:600"
+           data-en="Weekly Course Structure:" data-th="โครงสร้างหลักสูตรรายสัปดาห์:">Weekly Course Structure:</p>
+        <table class="week-table" style="font-size:.78rem">
+          <thead><tr>
+            <th data-en="Week" data-th="สัปดาห์">Week</th>
+            <th data-en="Theme" data-th="หัวข้อ">Theme</th>
+          </tr></thead>
+          <tbody>
+            <tr><td>1</td><td data-en="Game Logic &amp; Pattern Thinking – Input→Decision→Output" data-th="Game Logic &amp; Pattern Thinking – Input→Decision→Output">Game Logic &amp; Pattern Thinking – Input→Decision→Output</td></tr>
+            <tr><td>2</td><td data-en="My Blocks (Functions) – organize Pong with reusable blocks" data-th="My Blocks (Functions) – จัดระเบียบ Pong ด้วย blocks ที่ใช้ซ้ำได้">My Blocks (Functions) – organize Pong with reusable blocks</td></tr>
+            <tr><td>3</td><td data-en="Lists as Game Memory – save player name + score history" data-th="Lists เป็นหน่วยความจำเกม – บันทึกชื่อและประวัติคะแนน">Lists as Game Memory – save player name + score history</td></tr>
+            <tr><td>4</td><td data-en="Game Flow &amp; UI Screens – Start → Game → Result → Home" data-th="Game Flow &amp; UI Screens – Start → Game → Result → Home">Game Flow &amp; UI Screens – Start → Game → Result → Home</td></tr>
+            <tr><td>5</td><td data-en="Best Score System by Name – paired lists, replace-if-higher logic" data-th="ระบบ Best Score ตามชื่อ – paired lists, replace-if-higher">Best Score System by Name – paired lists, replace-if-higher logic</td></tr>
+            <tr><td>6</td><td data-en="Project Kickoff – remix, debug, plan final project" data-th="เริ่มโปรเจกต์ – remix, debug, วางแผน final project">Project Kickoff – remix, debug, plan final project</td></tr>
+            <tr><td>7</td><td data-en="Improve &amp; Polish – bug-fixing, smoother control, UI clarity" data-th="ปรับปรุงและขัดเกลา – bug-fixing, smoother control, UI clarity">Improve &amp; Polish – bug-fixing, smoother control, UI clarity</td></tr>
+            <tr><td>8</td><td data-en="Final Presentation Day – showcase &amp; explain logic" data-th="วันนำเสนอ Final – showcase และอธิบาย logic">Final Presentation Day – showcase &amp; explain logic</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <p style="color:var(--muted);font-size:.82rem;font-weight:600"
+           data-en="My Blocks Code Example:" data-th="ตัวอย่าง My Blocks:">My Blocks Code Example:</p>
+        <div class="code-block">
+          <div><span class="kw">define</span> <span class="fn">reset ball</span></div>
+          <div style="margin-left:12px">go to x: <span class="val">0</span> y: <span class="val">0</span></div>
+          <div style="margin-left:12px">set speed to <span class="val">5</span></div>
+          <br>
+          <div><span class="kw">define</span> <span class="fn">hit paddle</span></div>
+          <div style="margin-left:12px">change score by <span class="val">1</span></div>
+          <div style="margin-left:12px">change speed by <span class="val">0.3</span></div>
+          <br>
+          <div><span class="kw">define</span> <span class="fn">stop</span></div>
+          <div style="margin-left:12px"><span class="kw">if</span> touching ground → broadcast stop</div>
+        </div>
+        <div class="highlight-box" style="font-size:.82rem">
+          <strong data-en="Final Project:" data-th="โปรเจกต์สุดท้าย:">Final Project:</strong>
+          <span data-en=" Catch the Ball OR Click the Balloon — full game with My Blocks, Lists, and screen flow"
+                data-th=" Catch the Ball หรือ Click the Balloon — เกมครบ ด้วย My Blocks, Lists และ screen flow">
+            Catch the Ball OR Click the Balloon — full game with My Blocks, Lists, and screen flow
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8: Level 5 AI Explorer -->
+  <div class="slide slide-content" data-slide="8">
+    <div class="slide-header">
+      <span class="label" data-en="Level 5 · AI Track" data-th="ระดับ 5 · กลุ่ม AI">Level 5 · AI Track</span>
+      <h2 data-en="AI Explorer" data-th="AI Explorer">AI Explorer</h2>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="icon">💬</div>
+        <h3>ChatGPT</h3>
+        <p data-en="Primary AI tool · Prompting, writing, idea generation · Input → Data → Pattern → Output"
+           data-th="เครื่องมือ AI หลัก · Prompting, เขียน, สร้างไอเดีย · Input → Data → Pattern → Output">Primary AI tool · Prompting, writing, idea generation · Input → Data → Pattern → Output</p>
+      </div>
+      <div class="card">
+        <div class="icon">🔍</div>
+        <h3>Gemini</h3>
+        <p data-en="AI Comparison · Same prompt → different result · Understand AI limitations and bias"
+           data-th="AI เปรียบเทียบ · Prompt เดียวกัน → ผลต่างกัน · เข้าใจข้อจำกัดและอคติของ AI">AI Comparison · Same prompt → different result · Understand AI limitations and bias</p>
+      </div>
+      <div class="card">
+        <div class="icon">🎨</div>
+        <h3>DeepAI</h3>
+        <p data-en="Image generation · Visual prompt engineering (SASE) · Cause → Effect in prompt design"
+           data-th="สร้างรูปภาพ · Visual prompt engineering (SASE) · Cause → Effect ใน prompt design">Image generation · Visual prompt engineering (SASE) · Cause → Effect in prompt design</p>
+      </div>
+      <div class="card">
+        <div class="icon">📊</div>
+        <h3>Gamma + Canva</h3>
+        <p data-en="AI presentation tool + design · Turn ideas into visual narratives and slide decks"
+           data-th="เครื่องมือนำเสนอ AI + ดีไซน์ · เปลี่ยนไอเดียเป็น visual narratives และสไลด์">AI presentation tool + design · Turn ideas into visual narratives and slide decks</p>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:14px">
+      <strong>RACE Framework:</strong>
+      <span data-en=" Role · Action · Context · Expectation — structured AI communication"
+            data-th=" Role · Action · Context · Expectation — การสื่อสารกับ AI แบบมีโครงสร้าง">
+        Role · Action · Context · Expectation — structured AI communication
+      </span>
+      &nbsp;&nbsp;|&nbsp;&nbsp;
+      <strong>SASE Framework:</strong>
+      <span data-en=" Subject · Action · Setting · Style — image prompt engineering"
+            data-th=" Subject · Action · Setting · Style — Image prompt engineering">
+        Subject · Action · Setting · Style — image prompt engineering
+      </span>
+    </div>
+  </div>
+
+  <!-- 9: Level 6 AI+Scratch -->
+  <div class="slide slide-content" data-slide="9">
+    <div class="slide-header">
+      <span class="label" data-en="Level 6 · AI Track" data-th="ระดับ 6 · กลุ่ม AI">Level 6 · AI Track</span>
+      <h2 data-en="AI to Scratch System Builder" data-th="AI สู่ Scratch System Builder">AI to Scratch System Builder</h2>
+    </div>
+    <div class="flowchart" style="margin-bottom:16px">
+      <div class="flow-node" style="border-color:var(--ai-col);color:var(--ai-col)">💡 <span data-en="AI Idea Generation" data-th="สร้างไอเดียด้วย AI">AI Idea Generation</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:var(--ai-col);color:var(--ai-col)">📊 <span data-en="Flowchart Planning" data-th="วางแผน Flowchart">Flowchart Planning</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:var(--scratch);color:var(--scratch)">🎮 <span data-en="Scratch System Build" data-th="สร้างระบบ Scratch">Scratch System Build</span></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="border-color:#16a34a;color:#16a34a">🎤 <span data-en="Present &amp; Defend" data-th="นำเสนอและอธิบาย">Present &amp; Defend</span></div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="icon">🤔</div>
+        <h3 data-en="Think Before Prompting" data-th="คิดก่อน Prompt">Think Before Prompting</h3>
+        <p data-en="AI generates ideas — but students must evaluate, filter, and structure them into a logical plan"
+           data-th="AI สร้างไอเดีย — แต่นักเรียนต้องประเมิน กรอง และจัดโครงสร้างเป็นแผนที่มีตรรกะ">AI generates ideas — but students must evaluate, filter, and structure them into a logical plan</p>
+      </div>
+      <div class="card">
+        <div class="icon">🗺️</div>
+        <h3 data-en="Flowchart First" data-th="Flowchart ก่อนเสมอ">Flowchart First</h3>
+        <p data-en="All ideas must become flowcharts before any code is written — plan before build"
+           data-th="ทุกไอเดียต้องกลายเป็น Flowchart ก่อนเขียนโค้ด — วางแผนก่อนสร้าง">All ideas must become flowcharts before any code is written — plan before build</p>
+      </div>
+      <div class="card">
+        <div class="icon">🏆</div>
+        <h3 data-en="Plan → Build → Explain" data-th="วางแผน → สร้าง → อธิบาย">Plan → Build → Explain</h3>
+        <p data-en="Students own their logic and must defend their design decisions in a final presentation"
+           data-th="นักเรียนเป็นเจ้าของตรรกะและต้องอธิบายการตัดสินใจออกแบบในการนำเสนอสุดท้าย">Students own their logic and must defend their design decisions in a final presentation</p>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:12px;font-size:.88rem">
+      <strong data-en="Key Teaching Point:" data-th="สิ่งที่เน้นสอน:">Key Teaching Point:</strong>
+      <span data-en=" Good projects begin with planning. AI can help generate ideas, but the real work is turning those ideas into logical, structured systems."
+            data-th=" โปรเจกต์ที่ดีเริ่มต้นด้วยการวางแผน AI ช่วยสร้างไอเดียได้ แต่งานจริงคือการเปลี่ยนไอเดียเหล่านั้นให้เป็นระบบที่มีตรรกะ">
+        Good projects begin with planning. AI can help generate ideas, but the real work is turning those ideas into logical, structured systems.
+      </span>
+    </div>
+  </div>
+
+  <!-- 10: Python Levels 7–10 -->
+  <div class="slide slide-content" data-slide="10">
+    <div class="slide-header">
+      <span class="label" data-en="Levels 7–10 · Python Track" data-th="ระดับ 7–10 · กลุ่ม Python">Levels 7–10 · Python Track</span>
+      <h2 data-en="From Blocks to Real Code" data-th="จากบล็อกสู่โค้ดจริง">From Blocks to Real Code</h2>
+    </div>
+    <div class="level-grid">
+      <div class="level-row c-python">
+        <div class="level-num">7</div>
+        <div>
+          <div class="level-title" data-en="Python Foundations" data-th="พื้นฐาน Python">Python Foundations</div>
+          <div class="level-desc" data-en="print(), variables, data types, input(), basic calculations · Text-based Input→Process→Output"
+               data-th="print(), variables, data types, input(), การคำนวณพื้นฐาน · Text-based Input→Process→Output">print(), variables, data types, input(), basic calculations · Text-based Input→Process→Output</div>
+        </div>
+        <div style="font-size:.78rem;color:var(--muted)"
+             data-en="Bridge from Scratch visual blocks to Python text syntax"
+             data-th="สะพานเชื่อมจาก Scratch visual blocks ไปสู่ Python text syntax">Bridge from Scratch visual blocks to Python text syntax</div>
+        <div class="level-weeks">~8 <span data-en="wks" data-th="สัปดาห์">wks</span></div>
+      </div>
+      <div class="level-row c-python">
+        <div class="level-num">8</div>
+        <div>
+          <div class="level-title" data-en="Python Decision Systems" data-th="Python: ระบบการตัดสินใจ">Python Decision Systems</div>
+          <div class="level-desc" data-en="Comparison operators · if/elif/else · Interactive quizzes, checkers, logic programs"
+               data-th="Comparison operators · if/elif/else · Quizzes, checkers, logic programs">Comparison operators · if/elif/else · Interactive quizzes, checkers, logic programs</div>
+        </div>
+        <div style="font-size:.78rem;color:var(--muted)"
+             data-en="Programs that respond differently based on conditions"
+             data-th="โปรแกรมที่ตอบสนองต่างกันตามเงื่อนไข">Programs that respond differently based on conditions</div>
+        <div class="level-weeks">~8 <span data-en="wks" data-th="สัปดาห์">wks</span></div>
+      </div>
+      <div class="level-row c-python">
+        <div class="level-num">9</div>
+        <div>
+          <div class="level-title" data-en="Python System &amp; Function Builder" data-th="Python: ระบบและ Function Builder">Python System &amp; Function Builder</div>
+          <div class="level-desc" data-en="Functions, parameters, while loops, system flow, modular thinking"
+               data-th="Functions, parameters, while loops, system flow, modular thinking">Functions, parameters, while loops, system flow, modular thinking</div>
+        </div>
+        <div style="font-size:.78rem;color:var(--muted)"
+             data-en="Break programs into meaningful, reusable parts — clarity and structure matter"
+             data-th="แบ่งโปรแกรมออกเป็นส่วนที่มีความหมายและนำมาใช้ซ้ำ — ความชัดเจนและโครงสร้างสำคัญ">Break programs into meaningful, reusable parts — clarity and structure matter</div>
+        <div class="level-weeks">~8 <span data-en="wks" data-th="สัปดาห์">wks</span></div>
+      </div>
+      <div class="level-row c-python">
+        <div class="level-num">10</div>
+        <div>
+          <div class="level-title" data-en="Python AI System &amp; Intelligence Builder" data-th="Python: AI System &amp; Intelligence Builder">Python AI System &amp; Intelligence Builder</div>
+          <div class="level-desc" data-en="Rule-based vs AI-like systems · Data, memory, patterns, prediction, randomness · Adaptive programs"
+               data-th="Rule-based vs AI-like systems · ข้อมูล, memory, patterns, prediction, randomness · โปรแกรม adaptive">Rule-based vs AI-like systems · Data, memory, patterns, prediction, randomness · Adaptive programs</div>
+        </div>
+        <div style="font-size:.78rem;color:var(--muted)"
+             data-en="Intelligence in systems comes from data and patterns, not magic"
+             data-th="ความฉลาดในระบบมาจากข้อมูลและ patterns ไม่ใช่ความมหัศจรรย์">Intelligence in systems comes from data and patterns, not magic</div>
+        <div class="level-weeks">~8 <span data-en="wks" data-th="สัปดาห์">wks</span></div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:12px;font-size:.88rem">
+      <strong data-en="Transition Logic:" data-th="ตรรกะการเปลี่ยนผ่าน:">Transition Logic:</strong>
+      <span data-en=" Scratch (visual blocks) → Python (text syntax) → Structured systems → AI-style intelligent programs"
+            data-th=" Scratch (visual blocks) → Python (text syntax) → ระบบที่มีโครงสร้าง → โปรแกรมอัจฉริยะแบบ AI">
+        Scratch (visual blocks) → Python (text syntax) → Structured systems → AI-style intelligent programs
+      </span>
+    </div>
+  </div>
+
+  <!-- 11: Future Pathways -->
+  <div class="slide slide-content" data-slide="11">
+    <div class="slide-header">
+      <span class="label" data-en="After the Program" data-th="หลังจบหลักสูตร">After the Program</span>
+      <h2 data-en="Future Pathways" data-th="เส้นทางอนาคต">Future Pathways</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="cards" style="grid-template-columns:1fr">
+          <div class="card">
+            <div class="icon">🌐</div>
+            <h3 data-en="Web Development" data-th="Web Development">Web Development</h3>
+            <p data-en="HTML (Structure) → CSS (Design) → JavaScript (Logic) · Scratch logic → Python logic → JavaScript logic — students already think like developers"
+               data-th="HTML (โครงสร้าง) → CSS (ดีไซน์) → JavaScript (Logic) · Scratch → Python → JavaScript — นักเรียนคิดแบบนักพัฒนาอยู่แล้ว">HTML → CSS → JavaScript · Scratch logic → Python logic → JavaScript logic</p>
+          </div>
+          <div class="card">
+            <div class="icon">💻</div>
+            <h3 data-en="Software / Web Developer" data-th="Software / Web Developer">Software / Web Developer</h3>
+            <p data-en="Full-stack development · Backend systems &amp; databases · Real application deployment"
+               data-th="Full-stack development · Backend systems &amp; databases · การ deploy จริง">Full-stack development · Backend systems &amp; databases · Real application deployment</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="cards" style="grid-template-columns:1fr">
+          <div class="card">
+            <div class="icon">🤖</div>
+            <h3 data-en="AI Creator Path" data-th="เส้นทาง AI Creator">AI Creator Path</h3>
+            <p data-en="Build web + AI integrated products · Use APIs and automation · Create real-world digital solutions"
+               data-th="สร้างผลิตภัณฑ์ที่ผสาน Web + AI · ใช้ APIs และ automation · สร้างโซลูชันดิจิทัลจริง">Build web + AI integrated products · APIs &amp; automation · Real-world digital solutions</p>
+          </div>
+          <div class="card">
+            <div class="icon">📊</div>
+            <h3 data-en="AI Specialist Path" data-th="เส้นทาง AI Specialist">AI Specialist Path</h3>
+            <p data-en="Data thinking &amp; analysis · Machine learning fundamentals · Model understanding and prediction systems"
+               data-th="การคิดเชิงข้อมูล &amp; การวิเคราะห์ · Machine learning เบื้องต้น · ระบบ prediction">Data thinking &amp; analysis · Machine learning fundamentals · Model understanding</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="highlight-box" style="margin-top:14px">
+      <span style="font-size:1.4rem">🏗️</span><br>
+      <strong data-en="Students become builders of technology, not just users of it"
+              data-th="นักเรียนกลายเป็นผู้สร้างเทคโนโลยี ไม่ใช่แค่ผู้ใช้">Students become builders of technology, not just users of it</strong>
+    </div>
+  </div>
+
+  <!-- 12: Tools & Philosophy -->
+  <div class="slide slide-content" data-slide="12">
+    <div class="slide-header">
+      <span class="label" data-en="Core Philosophy" data-th="ปรัชญาหลัก">Core Philosophy</span>
+      <h2 data-en="Tools &amp; Teaching Principles" data-th="เครื่องมือและหลักการสอน">Tools &amp; Teaching Principles</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:10px;font-weight:600"
+           data-en="Tools used in this program:" data-th="เครื่องมือที่ใช้ในหลักสูตรนี้:">Tools used in this program:</p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px">
+          <span class="tool-badge"><span class="dot" style="background:#10a37f"></span>ChatGPT</span>
+          <span class="tool-badge"><span class="dot" style="background:#4285f4"></span>Gemini</span>
+          <span class="tool-badge"><span class="dot" style="background:#ff6b6b"></span>DeepAI</span>
+          <span class="tool-badge"><span class="dot" style="background:#9c27b0"></span>Gamma</span>
+          <span class="tool-badge"><span class="dot" style="background:#00c4cc"></span>Canva</span>
+          <span class="tool-badge"><span class="dot" style="background:var(--scratch)"></span>Scratch</span>
+          <span class="tool-badge"><span class="dot" style="background:var(--python)"></span>Python</span>
+          <span class="tool-badge"><span class="dot" style="background:#e74c3c"></span>Code.org</span>
+        </div>
+        <p style="color:var(--muted);font-size:.82rem;margin-bottom:8px;font-weight:600"
+           data-en="CIY Philosophy:" data-th="ปรัชญา CIY:">CIY Philosophy:</p>
+        <div class="flowchart">
+          <div class="flow-node" style="min-width:90px">Understand</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node" style="min-width:80px">Control</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node" style="min-width:70px">Create</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node" style="min-width:65px">Build</div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node" style="min-width:75px">Present</div>
+        </div>
+      </div>
+      <div>
+        <div class="highlight-box" style="text-align:left;margin-bottom:12px;border-color:#dc2626">
+          <strong style="display:block;margin-bottom:6px;color:#dc2626"
+                  data-en="Core Rule:" data-th="กฎหลัก:">Core Rule:</strong>
+          <p data-en="AI is a support tool, not a replacement for thinking."
+             data-th="AI เป็นเครื่องมือช่วย ไม่ใช่ตัวแทนการคิด">AI is a support tool, not a replacement for thinking.</p>
+        </div>
+        <ul class="bullets" style="font-size:.82rem">
+          <li data-en="Think before prompting" data-th="คิดก่อน Prompt">Think before prompting</li>
+          <li data-en="Question AI outputs — is this correct? why?" data-th="ตั้งคำถามกับผลลัพธ์ AI — ถูกต้องไหม? ทำไม?">Question AI outputs — is this correct? why?</li>
+          <li data-en="Take ownership of your work" data-th="เป็นเจ้าของผลงานของตัวเอง">Take ownership of your work</li>
+          <li data-en="Use AI responsibly and safely" data-th="ใช้ AI อย่างมีความรับผิดชอบและปลอดภัย">Use AI responsibly and safely</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13: Final Outcomes -->
+  <div class="slide slide-hero" data-slide="13">
+    <img src="Copy of CIY Logo 1.JPG" alt="CIY.CLUB" class="hero-logo" style="height:52px">
+    <div class="tagline"
+      data-en="Big Picture · Final Outcome"
+      data-th="ภาพรวมใหญ่ · ผลลัพธ์สุดท้าย">
+      Big Picture · Final Outcome
+    </div>
+    <ul class="hero-final-list">
+      <li data-en="Think in systems — not just write code" data-th="คิดเป็นระบบ — ไม่ใช่แค่เขียนโค้ด">Think in systems — not just write code</li>
+      <li data-en="Design and build real digital experiences" data-th="ออกแบบและสร้างประสบการณ์ดิจิทัลจริง">Design and build real digital experiences</li>
+      <li data-en="Use AI responsibly and effectively — as a tool, not a crutch" data-th="ใช้ AI อย่างรับผิดชอบและมีประสิทธิภาพ — เป็นเครื่องมือ ไม่ใช่ไม้ค้ำ">Use AI responsibly and effectively — as a tool, not a crutch</li>
+      <li data-en="Transition across platforms: Scratch → Python → Web" data-th="เปลี่ยนแพลตฟอร์มได้: Scratch → Python → Web">Transition across platforms: Scratch → Python → Web</li>
+      <li data-en="Communicate and present their ideas with confidence" data-th="สื่อสารและนำเสนอไอเดียด้วยความมั่นใจ">Communicate and present their ideas with confidence</li>
+    </ul>
+    <div class="badge" style="margin-top:14px;font-size:1rem;padding:10px 28px"
+         data-en="Students become builders of technology, not just users of it"
+         data-th="นักเรียนกลายเป็นผู้สร้างเทคโนโลยี ไม่ใช่แค่ผู้ใช้">
+      Students become builders of technology, not just users of it
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER NAV -->
+<div id="footer-nav">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← <span data-en="Prev" data-th="ก่อนหน้า">Prev</span></button>
+  <div class="dots" id="dots"></div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)"><span data-en="Next" data-th="ถัดไป">Next</span> →</button>
+</div>
+
+<script>
+  const TOTAL = 14;
+  let current = 0;
+  let lang = 'en';
+
+  const slides = document.querySelectorAll('.slide');
+  const dotsWrap = document.getElementById('dots');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const curSpan = document.getElementById('cur');
+  const totalSpan = document.getElementById('total');
+  totalSpan.textContent = TOTAL;
+
+  // Build dots
+  for (let i = 0; i < TOTAL; i++) {
+    const d = document.createElement('button');
+    d.className = 'dot-btn' + (i === 0 ? ' active' : '');
+    d.onclick = () => goTo(i);
+    dotsWrap.appendChild(d);
+  }
+
+  function goTo(n) {
+    slides[current].classList.remove('active');
+    slides[current].classList.add('exit');
+    setTimeout(() => slides[current].classList.remove('exit'), 450);
+    current = n;
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot-btn').forEach((d, i) => d.classList.toggle('active', i === current));
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === TOTAL - 1;
+    curSpan.textContent = current + 1;
+  }
+
+  function navigate(dir) {
+    if (current + dir >= 0 && current + dir < TOTAL) goTo(current + dir);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') navigate(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') navigate(-1);
+  });
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
+  });
+
+  // Language toggle
+  function toggleLang() {
+    lang = lang === 'en' ? 'th' : 'en';
+    document.getElementById('lang-toggle').textContent = lang === 'en' ? '🌐 ภาษาไทย' : '🌐 English';
+    document.querySelectorAll('[data-en]').forEach(el => {
+      const val = el.getAttribute('data-' + lang);
+      if (val !== null) el.innerHTML = val;
+    });
+  }
+</script>
+</body>
+</html>
